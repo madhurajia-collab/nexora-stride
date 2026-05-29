@@ -1,6 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Dashboard from './Dashboard';
+import SprintBoard from './SprintBoard';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [currentPage, setCurrentPage] = useState('dashboard');
+
+  if (loggedIn) {
+    if (currentPage === 'sprintboard') {
+      return <SprintBoard setCurrentPage={setCurrentPage} />;
+    }
+    return <Dashboard setCurrentPage={setCurrentPage} />;
+  }
+
   return (
     <div style={{
       backgroundColor: '#0D1117',
@@ -18,8 +30,6 @@ function App() {
         border: '1px solid #30363D',
         width: '380px'
       }}>
-
-        {/* Logo */}
         <div style={{
           fontSize: '14px',
           color: '#6D28D9',
@@ -30,7 +40,6 @@ function App() {
           NEXORA
         </div>
 
-        {/* Product Name */}
         <h1 style={{
           fontSize: '42px',
           fontWeight: 'bold',
@@ -40,7 +49,6 @@ function App() {
           Stride
         </h1>
 
-        {/* Tagline */}
         <p style={{
           color: '#8B949E',
           fontSize: '14px',
@@ -49,23 +57,23 @@ function App() {
           AI Sprint Intelligence Dashboard
         </p>
 
-        {/* Login Button */}
-        <button style={{
-          backgroundColor: '#6D28D9',
-          color: '#FFFFFF',
-          border: 'none',
-          borderRadius: '8px',
-          padding: '14px 32px',
-          fontSize: '16px',
-          fontWeight: 'bold',
-          cursor: 'pointer',
-          width: '100%',
-          marginBottom: '24px'
-        }}>
+        <button
+          onClick={() => setLoggedIn(true)}
+          style={{
+            backgroundColor: '#6D28D9',
+            color: '#FFFFFF',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '14px 32px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            width: '100%',
+            marginBottom: '24px'
+          }}>
           Login with GitHub
         </button>
 
-        {/* Footer text */}
         <p style={{
           color: '#30363D',
           fontSize: '12px',
@@ -73,7 +81,6 @@ function App() {
         }}>
           Track. Predict. Deliver.
         </p>
-
       </div>
     </div>
   );
