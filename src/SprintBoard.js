@@ -60,7 +60,11 @@ function SprintBoard({ setCurrentPage }) {
   Sprint Board
 </span>
           <span style={{ color: '#6D28D9', fontSize: '14px', fontWeight: 'bold', borderBottom: '2px solid #6D28D9', paddingBottom: '2px' }}>Sprint Board</span>
-          <span style={{ color: '#8B949E', fontSize: '14px', cursor: 'pointer' }}>Team</span>
+          <span
+  onClick={() => setCurrentPage('team')}
+  style={{ color: '#8B949E', fontSize: '14px', cursor: 'pointer' }}>
+  Team
+</span>
           <div style={{ backgroundColor: '#6D28D9', borderRadius: '20px', padding: '6px 16px', fontSize: '14px' }}>
             👤 John's Team
           </div>

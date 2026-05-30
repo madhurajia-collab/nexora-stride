@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Dashboard from './Dashboard';
 import SprintBoard from './SprintBoard';
+import TeamView from './TeamView';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -9,6 +10,9 @@ function App() {
   if (loggedIn) {
     if (currentPage === 'sprintboard') {
       return <SprintBoard setCurrentPage={setCurrentPage} />;
+    }
+    if (currentPage === 'team') {
+      return <TeamView setCurrentPage={setCurrentPage} />;
     }
     return <Dashboard setCurrentPage={setCurrentPage} />;
   }
