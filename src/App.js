@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Dashboard from './Dashboard';
 import SprintBoard from './SprintBoard';
 import TeamView from './TeamView';
+import Reports from './Reports';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -13,6 +14,9 @@ function App() {
     }
     if (currentPage === 'team') {
       return <TeamView setCurrentPage={setCurrentPage} />;
+    }
+    if (currentPage === 'reports') {
+      return <Reports setCurrentPage={setCurrentPage} />;
     }
     return <Dashboard setCurrentPage={setCurrentPage} />;
   }
@@ -43,7 +47,6 @@ function App() {
         }}>
           NEXORA
         </div>
-
         <h1 style={{
           fontSize: '42px',
           fontWeight: 'bold',
@@ -52,7 +55,6 @@ function App() {
         }}>
           Stride
         </h1>
-
         <p style={{
           color: '#8B949E',
           fontSize: '14px',
@@ -60,7 +62,6 @@ function App() {
         }}>
           AI Sprint Intelligence Dashboard
         </p>
-
         <button
           onClick={() => setLoggedIn(true)}
           style={{
@@ -77,7 +78,6 @@ function App() {
           }}>
           Login with GitHub
         </button>
-
         <p style={{
           color: '#30363D',
           fontSize: '12px',

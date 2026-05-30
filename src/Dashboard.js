@@ -55,7 +55,11 @@ function Dashboard({ setCurrentPage }) {
   </span>
   <span style={{ color: '#8B949E', fontSize: '13px', cursor: 'pointer' }}>
     Team
-  </span>
+  </span><span
+  onClick={() => setCurrentPage('reports')}
+  style={{ color: '#8B949E', fontSize: '13px', cursor: 'pointer' }}>
+  Reports
+</span>
 </div><div style={{
           backgroundColor: '#6D28D9',
           borderRadius: '20px',
