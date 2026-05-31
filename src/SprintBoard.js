@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Navbar from './Navbar';
 
 function SprintBoard({ setCurrentPage }) {
   const [tasks, setTasks] = useState([
@@ -40,41 +41,10 @@ function SprintBoard({ setCurrentPage }) {
       color: '#FFFFFF'
     }}>
 
-      {/* Navbar */}
-      <div style={{
-        backgroundColor: '#161B22',
-        borderBottom: '1px solid #30363D',
-        padding: '16px 32px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ color: '#6D28D9', fontWeight: 'bold', fontSize: '12px', letterSpacing: '2px' }}>NEXORA</span>
-          <span style={{ color: '#FFFFFF', fontWeight: 'bold', fontSize: '20px' }}>Stride</span>
-        </div>
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-          <span
-  onClick={() => setCurrentPage('sprintboard')}
-  style={{ color: '#8B949E', fontSize: '14px', cursor: 'pointer' }}>
-  Sprint Board
-</span>
-          <span style={{ color: '#6D28D9', fontSize: '14px', fontWeight: 'bold', borderBottom: '2px solid #6D28D9', paddingBottom: '2px' }}>Sprint Board</span>
-          <span
-  onClick={() => setCurrentPage('team')}
-  style={{ color: '#8B949E', fontSize: '14px', cursor: 'pointer' }}>
-  Team
-</span>
-          <div style={{ backgroundColor: '#6D28D9', borderRadius: '20px', padding: '6px 16px', fontSize: '14px' }}>
-            👤 John's Team
-          </div>
-        </div>
-      </div>
+      <Navbar currentPage="sprintboard" setCurrentPage={setCurrentPage} />
 
-      {/* Content */}
       <div style={{ padding: '32px' }}>
 
-        {/* Header */}
         <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>Sprint Board</h1>
@@ -94,7 +64,6 @@ function SprintBoard({ setCurrentPage }) {
           </button>
         </div>
 
-        {/* Kanban Board */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
@@ -108,7 +77,6 @@ function SprintBoard({ setCurrentPage }) {
               padding: '16px'
             }}>
 
-              {/* Column Header */}
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -135,7 +103,6 @@ function SprintBoard({ setCurrentPage }) {
                 </span>
               </div>
 
-              {/* Tasks */}
               {tasks
                 .filter(task => task.status === column.id)
                 .map(task => (
@@ -146,7 +113,6 @@ function SprintBoard({ setCurrentPage }) {
                     padding: '12px',
                     marginBottom: '8px'
                   }}>
-                    {/* Priority Badge */}
                     <div style={{
                       display: 'inline-block',
                       backgroundColor: getPriorityColor(task.priority),
@@ -161,12 +127,10 @@ function SprintBoard({ setCurrentPage }) {
                       {task.priority}
                     </div>
 
-                    {/* Task Title */}
                     <p style={{ margin: '0 0 12px 0', fontSize: '14px', lineHeight: '1.4' }}>
                       {task.title}
                     </p>
 
-                    {/* Assignee */}
                     <div style={{
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -182,7 +146,6 @@ function SprintBoard({ setCurrentPage }) {
                         👤 {task.assignee}
                       </span>
 
-                      {/* Move Button */}
                       {column.id !== 'done' && (
                         <button
                           onClick={() => moveTask(task.id, column.id === 'todo' ? 'inprogress' : column.id === 'inprogress' ? 'done' : 'done')}

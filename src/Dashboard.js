@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from './Navbar';
 
 function Dashboard({ setCurrentPage }) {
   const tasks = [
@@ -29,51 +30,10 @@ function Dashboard({ setCurrentPage }) {
       color: '#FFFFFF'
     }}>
 
-      {/* Top Navigation Bar */}
-      <div style={{
-        backgroundColor: '#161B22',
-        borderBottom: '1px solid #30363D',
-        padding: '16px 32px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ color: '#6D28D9', fontWeight: 'bold', fontSize: '12px', letterSpacing: '2px' }}>NEXORA</span>
-          <span style={{ color: '#FFFFFF', fontWeight: 'bold', fontSize: '20px' }}>Stride</span>
-        </div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-  <span
-    onClick={() => setCurrentPage('dashboard')}
-    style={{ color: '#8B949E', fontSize: '13px', cursor: 'pointer' }}>
-    Dashboard
-  </span>
-  <span
-    onClick={() => setCurrentPage('sprintboard')}
-    style={{ color: '#6D28D9', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}>
-    Sprint Board
-  </span>
-  <span style={{ color: '#8B949E', fontSize: '13px', cursor: 'pointer' }}>
-    Team
-  </span><span
-  onClick={() => setCurrentPage('reports')}
-  style={{ color: '#8B949E', fontSize: '13px', cursor: 'pointer' }}>
-  Reports
-</span>
-</div><div style={{
-          backgroundColor: '#6D28D9',
-          borderRadius: '20px',
-          padding: '6px 16px',
-          fontSize: '14px'
-        }}>
-          👤 John's Team
-        </div>
-      </div>
+      <Navbar currentPage="dashboard" setCurrentPage={setCurrentPage} />
 
-      {/* Main Content */}
       <div style={{ padding: '32px' }}>
 
-        {/* Sprint Header */}
         <div style={{ marginBottom: '32px' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>
             Sprint 12
@@ -83,7 +43,6 @@ function Dashboard({ setCurrentPage }) {
           </p>
         </div>
 
-        {/* Stats Cards */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
@@ -118,7 +77,6 @@ function Dashboard({ setCurrentPage }) {
           ))}
         </div>
 
-        {/* Sprint Health Bar */}
         <div style={{
           backgroundColor: '#161B22',
           border: '1px solid #30363D',
@@ -149,14 +107,13 @@ function Dashboard({ setCurrentPage }) {
           </div>
         </div>
 
-        {/* Recent Tasks */}
         <div style={{
           backgroundColor: '#161B22',
           border: '1px solid #30363D',
           borderRadius: '12px',
           padding: '24px'
         }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', margin: '0 0 20px 0' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 20px 0' }}>
             Recent Tasks
           </h2>
           {tasks.map((task) => (

@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from './Navbar';
 
 function TeamView({ setCurrentPage }) {
   const members = [
@@ -97,50 +98,15 @@ function TeamView({ setCurrentPage }) {
       color: '#FFFFFF'
     }}>
 
-      {/* Navbar */}
-      <div style={{
-        backgroundColor: '#161B22',
-        borderBottom: '1px solid #30363D',
-        padding: '16px 32px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ color: '#6D28D9', fontWeight: 'bold', fontSize: '12px', letterSpacing: '2px' }}>NEXORA</span>
-          <span style={{ color: '#FFFFFF', fontWeight: 'bold', fontSize: '20px' }}>Stride</span>
-        </div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <span
-            onClick={() => setCurrentPage('dashboard')}
-            style={{ color: '#8B949E', fontSize: '13px', cursor: 'pointer' }}>
-            Dashboard
-          </span>
-          <span
-            onClick={() => setCurrentPage('sprintboard')}
-            style={{ color: '#8B949E', fontSize: '13px', cursor: 'pointer' }}>
-            Sprint Board
-          </span>
-          <span
-            style={{ color: '#6D28D9', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}>
-            Team
-          </span>
-          <div style={{ backgroundColor: '#6D28D9', borderRadius: '20px', padding: '4px 12px', fontSize: '13px' }}>
-            👤 John's Team
-          </div>
-        </div>
-      </div>
+      <Navbar currentPage="team" setCurrentPage={setCurrentPage} />
 
-      {/* Content */}
       <div style={{ padding: '32px' }}>
 
-        {/* Header */}
         <div style={{ marginBottom: '32px' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>Team View</h1>
           <p style={{ color: '#8B949E', margin: '0' }}>Sprint 12 · 4 members · 6 days remaining</p>
         </div>
 
-        {/* Team Stats Row */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
@@ -168,7 +134,6 @@ function TeamView({ setCurrentPage }) {
           ))}
         </div>
 
-        {/* Team Members Grid */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
@@ -182,9 +147,7 @@ function TeamView({ setCurrentPage }) {
               padding: '24px'
             }}>
 
-              {/* Member Header */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-                {/* Avatar */}
                 <div style={{
                   width: '50px',
                   height: '50px',
@@ -200,7 +163,6 @@ function TeamView({ setCurrentPage }) {
                   {member.avatar}
                 </div>
 
-                {/* Name & Role */}
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '4px' }}>
                     {member.name}
@@ -210,7 +172,6 @@ function TeamView({ setCurrentPage }) {
                   </div>
                 </div>
 
-                {/* Status Badge */}
                 <div style={{
                   backgroundColor: member.status === 'active' ? '#16A34A' : '#DC2626',
                   color: '#FFFFFF',
@@ -223,7 +184,6 @@ function TeamView({ setCurrentPage }) {
                 </div>
               </div>
 
-              {/* Stats Row */}
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(3, 1fr)',
@@ -249,7 +209,6 @@ function TeamView({ setCurrentPage }) {
                 ))}
               </div>
 
-              {/* Workload Bar */}
               <div style={{ marginBottom: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                   <span style={{ fontSize: '12px', color: '#8B949E' }}>Workload</span>
@@ -267,7 +226,6 @@ function TeamView({ setCurrentPage }) {
                 </div>
               </div>
 
-              {/* Recent Tasks */}
               <div>
                 <div style={{ fontSize: '12px', color: '#8B949E', marginBottom: '8px' }}>Recent Tasks</div>
                 {member.tasks.map((task, i) => (
@@ -293,7 +251,6 @@ function TeamView({ setCurrentPage }) {
                 ))}
               </div>
 
-              {/* Last Active */}
               <div style={{ marginTop: '12px', color: '#8B949E', fontSize: '12px' }}>
                 🕐 Last active: {member.lastActive}
               </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from './Navbar';
 
 function Reports({ setCurrentPage }) {
   const weeklyData = [
@@ -21,34 +22,10 @@ function Reports({ setCurrentPage }) {
       color: '#FFFFFF'
     }}>
 
-      {/* Navbar */}
-      <div style={{
-        backgroundColor: '#161B22',
-        borderBottom: '1px solid #30363D',
-        padding: '16px 32px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ color: '#6D28D9', fontWeight: 'bold', fontSize: '12px', letterSpacing: '2px' }}>NEXORA</span>
-          <span style={{ color: '#FFFFFF', fontWeight: 'bold', fontSize: '20px' }}>Stride</span>
-        </div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <span onClick={() => setCurrentPage('dashboard')} style={{ color: '#8B949E', fontSize: '13px', cursor: 'pointer' }}>Dashboard</span>
-          <span onClick={() => setCurrentPage('sprintboard')} style={{ color: '#8B949E', fontSize: '13px', cursor: 'pointer' }}>Sprint Board</span>
-          <span onClick={() => setCurrentPage('team')} style={{ color: '#8B949E', fontSize: '13px', cursor: 'pointer' }}>Team</span>
-          <span style={{ color: '#6D28D9', fontSize: '13px', fontWeight: 'bold' }}>Reports</span>
-          <div style={{ backgroundColor: '#6D28D9', borderRadius: '20px', padding: '4px 12px', fontSize: '13px' }}>
-            👤 John's Team
-          </div>
-        </div>
-      </div>
+      <Navbar currentPage="reports" setCurrentPage={setCurrentPage} />
 
-      {/* Content */}
       <div style={{ padding: '32px' }}>
 
-        {/* Header */}
         <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>Reports</h1>
@@ -68,7 +45,6 @@ function Reports({ setCurrentPage }) {
           </button>
         </div>
 
-        {/* Summary Cards */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
@@ -99,7 +75,6 @@ function Reports({ setCurrentPage }) {
           ))}
         </div>
 
-        {/* Velocity Chart */}
         <div style={{
           backgroundColor: '#161B22',
           border: '1px solid #30363D',
@@ -114,7 +89,6 @@ function Reports({ setCurrentPage }) {
             Planned vs Completed tasks per day
           </p>
 
-          {/* Chart */}
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '16px', height: '200px', padding: '0 16px' }}>
             {weeklyData.map((day, i) => (
               <div key={i} style={{
@@ -126,16 +100,13 @@ function Reports({ setCurrentPage }) {
                 height: '100%',
                 justifyContent: 'flex-end'
               }}>
-                {/* Bars */}
                 <div style={{ display: 'flex', gap: '4px', alignItems: 'flex-end', width: '100%', justifyContent: 'center' }}>
-                  {/* Planned bar */}
                   <div style={{
                     width: '16px',
                     height: `${(day.planned / maxValue) * 160}px`,
                     backgroundColor: '#30363D',
                     borderRadius: '4px 4px 0 0'
                   }}/>
-                  {/* Completed bar */}
                   <div style={{
                     width: '16px',
                     height: `${(day.completed / maxValue) * 160}px`,
@@ -143,13 +114,11 @@ function Reports({ setCurrentPage }) {
                     borderRadius: '4px 4px 0 0'
                   }}/>
                 </div>
-                {/* Day label */}
                 <div style={{ color: '#8B949E', fontSize: '12px', marginTop: '8px' }}>{day.day}</div>
               </div>
             ))}
           </div>
 
-          {/* Legend */}
           <div style={{ display: 'flex', gap: '24px', marginTop: '16px', justifyContent: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div style={{ width: '12px', height: '12px', backgroundColor: '#30363D', borderRadius: '2px' }}/>
@@ -162,7 +131,6 @@ function Reports({ setCurrentPage }) {
           </div>
         </div>
 
-        {/* AI Weekly Digest */}
         <div style={{
           backgroundColor: '#161B22',
           border: '1px solid #6D28D9',
@@ -198,7 +166,6 @@ function Reports({ setCurrentPage }) {
           </p>
         </div>
 
-        {/* Sprint Completion Forecast */}
         <div style={{
           backgroundColor: '#161B22',
           border: '1px solid #30363D',
@@ -209,7 +176,6 @@ function Reports({ setCurrentPage }) {
             Sprint Completion Forecast
           </h2>
           <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-            {/* Big percentage */}
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '72px', fontWeight: 'bold', color: '#16A34A', lineHeight: '1' }}>
                 73%
@@ -219,7 +185,6 @@ function Reports({ setCurrentPage }) {
               </div>
             </div>
 
-            {/* Forecast details */}
             <div style={{ flex: 1 }}>
               {[
                 { label: 'Tasks remaining', value: '8 tasks', color: '#8B949E' },
