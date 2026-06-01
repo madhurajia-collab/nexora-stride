@@ -1,36 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Navbar from './Navbar';
 
-function SprintBoard({ setCurrentPage }) {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: "Setup auth module", assignee: "Rahul", status: "done", priority: "high" },
-    { id: 2, title: "Build API endpoints", assignee: "Priya", status: "inprogress", priority: "high" },
-    { id: 3, title: "Fix payment bug", assignee: "Amit", status: "blocked", priority: "critical" },
-    { id: 4, title: "Design dashboard UI", assignee: "Sara", status: "done", priority: "medium" },
-    { id: 5, title: "Write unit tests", assignee: "Rahul", status: "inprogress", priority: "medium" },
-    { id: 6, title: "Setup database", assignee: "Priya", status: "todo", priority: "high" },
-    { id: 7, title: "Deploy to staging", assignee: "Amit", status: "todo", priority: "low" },
-    { id: 8, title: "Code review", assignee: "Sara", status: "todo", priority: "medium" },
-  ]);
+function SprintBoard({ setCurrentPage, tasks, moveTask }) {
 
   const columns = [
-    { id: "todo", label: "To Do", color: "#8B949E", count: tasks.filter(t => t.status === "todo").length },
-    { id: "inprogress", label: "In Progress", color: "#6D28D9", count: tasks.filter(t => t.status === "inprogress").length },
-    { id: "blocked", label: "Blocked", color: "#DC2626", count: tasks.filter(t => t.status === "blocked").length },
-    { id: "done", label: "Done", color: "#16A34A", count: tasks.filter(t => t.status === "done").length },
+    { id: 'todo',       label: 'To Do',       color: '#8B949E' },
+    { id: 'inprogress', label: 'In Progress',  color: '#6D28D9' },
+    { id: 'blocked',    label: 'Blocked',      color: '#DC2626' },
+    { id: 'done',       label: 'Done',         color: '#16A34A' },
   ];
 
   const getPriorityColor = (priority) => {
-    if (priority === "critical") return "#DC2626";
-    if (priority === "high") return "#EA580C";
-    if (priority === "medium") return "#6D28D9";
-    if (priority === "low") return "#16A34A";
+    if (priority === 'critical') return '#DC2626';
+    if (priority === 'high')     return '#EA580C';
+    if (priority === 'medium')   return '#6D28D9';
+    if (priority === 'low')      return '#16A34A';
   };
 
-  const moveTask = (taskId, newStatus) => {
-    setTasks(tasks.map(task =>
-      task.id === taskId ? { ...task, status: newStatus } : task
-    ));
+  const getNextStatus = (currentStatus) => {
+    if (currentStatus === 'todo')       return 'inprogress';
+    if (currentStatus === 'inprogress') return 'done';
+    if (currentStatus === 'blocked')    return 'done';
+    return 'done';
   };
 
   return (
@@ -45,7 +36,12 @@ function SprintBoard({ setCurrentPage }) {
 
       <div style={{ padding: '32px' }}>
 
-        <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{
+          marginBottom: '32px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
           <div>
             <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>Sprint Board</h1>
             <p style={{ color: '#8B949E', margin: '0' }}>Sprint 12 · 6 days remaining</p>
@@ -99,7 +95,7 @@ function SprintBoard({ setCurrentPage }) {
                   fontSize: '12px',
                   color: '#8B949E'
                 }}>
-                  {column.count}
+                  {tasks.filter(t => t.status === column.id).length}
                 </span>
               </div>
 
@@ -148,7 +144,7 @@ function SprintBoard({ setCurrentPage }) {
 
                       {column.id !== 'done' && (
                         <button
-                          onClick={() => moveTask(task.id, column.id === 'todo' ? 'inprogress' : column.id === 'inprogress' ? 'done' : 'done')}
+                          onClick={() => moveTask(task.id, getNextStatus(task.status))}
                           style={{
                             backgroundColor: '#6D28D9',
                             color: '#FFFFFF',

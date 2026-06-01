@@ -1,25 +1,34 @@
 import React from 'react';
 import Navbar from './Navbar';
 
-function Dashboard({ setCurrentPage }) {
-  const tasks = [
-    { id: 1, title: "Setup auth module", assignee: "Rahul", status: "done" },
-    { id: 2, title: "Build API endpoints", assignee: "Priya", status: "inprogress" },
-    { id: 3, title: "Fix payment bug", assignee: "Amit", status: "blocked" },
-    { id: 4, title: "Design dashboard UI", assignee: "Sara", status: "done" },
-    { id: 5, title: "Write unit tests", assignee: "Rahul", status: "inprogress" },
-  ];
+function Dashboard({ setCurrentPage, tasks }) {
+
+  // ── Calculate numbers from real tasks ──────────────────────
+  const total      = tasks.length;
+  const completed  = tasks.filter(t => t.status === 'done').length;
+  const inProgress = tasks.filter(t => t.status === 'inprogress').length;
+  const blocked    = tasks.filter(t => t.status === 'blocked').length;
+  const health     = Math.round((completed / total) * 100);
 
   const getStatusIcon = (status) => {
-    if (status === "done") return "✅";
-    if (status === "inprogress") return "🔄";
-    if (status === "blocked") return "🚫";
+    if (status === 'done')       return '✅';
+    if (status === 'inprogress') return '🔄';
+    if (status === 'blocked')    return '🚫';
+    return '⬜';
   };
 
   const getStatusColor = (status) => {
-    if (status === "done") return "#16A34A";
-    if (status === "inprogress") return "#6D28D9";
-    if (status === "blocked") return "#DC2626";
+    if (status === 'done')       return '#16A34A';
+    if (status === 'inprogress') return '#6D28D9';
+    if (status === 'blocked')    return '#DC2626';
+    return '#8B949E';
+  };
+
+  const getStatusLabel = (status) => {
+    if (status === 'done')       return 'Done';
+    if (status === 'inprogress') return 'In Progress';
+    if (status === 'blocked')    return 'Blocked';
+    return 'To Do';
   };
 
   return (
@@ -34,6 +43,7 @@ function Dashboard({ setCurrentPage }) {
 
       <div style={{ padding: '32px' }}>
 
+        {/* Sprint Header */}
         <div style={{ marginBottom: '32px' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>
             Sprint 12
@@ -43,6 +53,7 @@ function Dashboard({ setCurrentPage }) {
           </p>
         </div>
 
+        {/* Stats Cards — calculated from real tasks */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
@@ -50,10 +61,10 @@ function Dashboard({ setCurrentPage }) {
           marginBottom: '32px'
         }}>
           {[
-            { label: 'Total Tasks', value: '20', color: '#8B949E' },
-            { label: 'Completed', value: '12', color: '#16A34A' },
-            { label: 'In Progress', value: '5', color: '#6D28D9' },
-            { label: 'Blocked', value: '3', color: '#DC2626' },
+            { label: 'Total Tasks',  value: total,      color: '#8B949E' },
+            { label: 'Completed',    value: completed,  color: '#16A34A' },
+            { label: 'In Progress',  value: inProgress, color: '#6D28D9' },
+            { label: 'Blocked',      value: blocked,    color: '#DC2626' },
           ].map((stat, index) => (
             <div key={index} style={{
               backgroundColor: '#161B22',
@@ -77,6 +88,7 @@ function Dashboard({ setCurrentPage }) {
           ))}
         </div>
 
+        {/* Sprint Health — calculated from real tasks */}
         <div style={{
           backgroundColor: '#161B22',
           border: '1px solid #30363D',
@@ -90,7 +102,12 @@ function Dashboard({ setCurrentPage }) {
             marginBottom: '12px'
           }}>
             <span style={{ fontWeight: 'bold' }}>Sprint Health</span>
-            <span style={{ color: '#16A34A', fontWeight: 'bold' }}>73% On Track ✅</span>
+            <span style={{
+              color: health >= 70 ? '#16A34A' : health >= 40 ? '#EA580C' : '#DC2626',
+              fontWeight: 'bold'
+            }}>
+              {health}% {health >= 70 ? 'On Track ✅' : health >= 40 ? 'At Risk ⚠️' : 'Behind 🚫'}
+            </span>
           </div>
           <div style={{
             backgroundColor: '#30363D',
@@ -99,14 +116,16 @@ function Dashboard({ setCurrentPage }) {
             overflow: 'hidden'
           }}>
             <div style={{
-              backgroundColor: '#16A34A',
-              width: '73%',
+              backgroundColor: health >= 70 ? '#16A34A' : health >= 40 ? '#EA580C' : '#DC2626',
+              width: `${health}%`,
               height: '100%',
-              borderRadius: '999px'
+              borderRadius: '999px',
+              transition: 'width 0.5s ease'
             }}/>
           </div>
         </div>
 
+        {/* Recent Tasks — from real tasks */}
         <div style={{
           backgroundColor: '#161B22',
           border: '1px solid #30363D',
@@ -138,7 +157,7 @@ function Dashboard({ setCurrentPage }) {
                   fontSize: '12px',
                   fontWeight: 'bold'
                 }}>
-                  {task.status === 'done' ? 'Done' : task.status === 'inprogress' ? 'In Progress' : 'Blocked'}
+                  {getStatusLabel(task.status)}
                 </span>
               </div>
             </div>

@@ -4,21 +4,41 @@ import SprintBoard from './SprintBoard';
 import TeamView from './TeamView';
 import Reports from './Reports';
 
+// ── Shared task list lives here in App ──────────────────────────
+const initialTasks = [
+  { id: 1, title: "Setup auth module",   assignee: "Rahul", status: "done",       priority: "high" },
+  { id: 2, title: "Build API endpoints", assignee: "Priya", status: "inprogress", priority: "high" },
+  { id: 3, title: "Fix payment bug",     assignee: "Amit",  status: "blocked",    priority: "critical" },
+  { id: 4, title: "Design dashboard UI", assignee: "Sara",  status: "done",       priority: "medium" },
+  { id: 5, title: "Write unit tests",    assignee: "Rahul", status: "inprogress", priority: "medium" },
+  { id: 6, title: "Setup database",      assignee: "Priya", status: "todo",       priority: "high" },
+  { id: 7, title: "Deploy to staging",   assignee: "Amit",  status: "todo",       priority: "low" },
+  { id: 8, title: "Code review",         assignee: "Sara",  status: "todo",       priority: "medium" },
+];
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentPage, setCurrentPage] = useState('dashboard');
+  const [tasks, setTasks] = useState(initialTasks);
+
+  // ── Move a task to a new status ──────────────────────────────
+  const moveTask = (taskId, newStatus) => {
+    setTasks(tasks.map(task =>
+      task.id === taskId ? { ...task, status: newStatus } : task
+    ));
+  };
 
   if (loggedIn) {
     if (currentPage === 'sprintboard') {
-      return <SprintBoard setCurrentPage={setCurrentPage} />;
+      return <SprintBoard setCurrentPage={setCurrentPage} tasks={tasks} moveTask={moveTask} />;
     }
     if (currentPage === 'team') {
-      return <TeamView setCurrentPage={setCurrentPage} />;
+      return <TeamView setCurrentPage={setCurrentPage} tasks={tasks} />;
     }
     if (currentPage === 'reports') {
-      return <Reports setCurrentPage={setCurrentPage} />;
+      return <Reports setCurrentPage={setCurrentPage} tasks={tasks} />;
     }
-    return <Dashboard setCurrentPage={setCurrentPage} />;
+    return <Dashboard setCurrentPage={setCurrentPage} tasks={tasks} />;
   }
 
   return (
