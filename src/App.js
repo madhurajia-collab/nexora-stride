@@ -4,7 +4,6 @@ import SprintBoard from './SprintBoard';
 import TeamView from './TeamView';
 import Reports from './Reports';
 
-// ── Shared task list lives here in App ──────────────────────────
 const initialTasks = [
   { id: 1, title: "Setup auth module",   assignee: "Rahul", status: "done",       priority: "high" },
   { id: 2, title: "Build API endpoints", assignee: "Priya", status: "inprogress", priority: "high" },
@@ -21,16 +20,23 @@ function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [tasks, setTasks] = useState(initialTasks);
 
-  // ── Move a task to a new status ──────────────────────────────
   const moveTask = (taskId, newStatus) => {
     setTasks(tasks.map(task =>
       task.id === taskId ? { ...task, status: newStatus } : task
     ));
   };
 
+  const addTask = (newTask) => {
+    const task = {
+      ...newTask,
+      id: tasks.length + 1
+    };
+    setTasks([...tasks, task]);
+  };
+
   if (loggedIn) {
     if (currentPage === 'sprintboard') {
-      return <SprintBoard setCurrentPage={setCurrentPage} tasks={tasks} moveTask={moveTask} />;
+      return <SprintBoard setCurrentPage={setCurrentPage} tasks={tasks} moveTask={moveTask} addTask={addTask} />;
     }
     if (currentPage === 'team') {
       return <TeamView setCurrentPage={setCurrentPage} tasks={tasks} />;
