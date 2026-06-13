@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
 
   const [showForm, setShowForm] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [newTitle, setNewTitle] = useState('');
   const [newAssignee, setNewAssignee] = useState('');
   const [newPriority, setNewPriority] = useState('medium');
@@ -34,6 +35,20 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
     if (priority === 'high')     return '#EA580C';
     if (priority === 'medium')   return '#6D28D9';
     if (priority === 'low')      return '#16A34A';
+  };
+
+  const getStatusColor = (status) => {
+    if (status === 'todo')       return '#8B949E';
+    if (status === 'inprogress') return '#6D28D9';
+    if (status === 'blocked')    return '#DC2626';
+    if (status === 'done')       return '#16A34A';
+  };
+
+  const getStatusLabel = (status) => {
+    if (status === 'todo')       return 'To Do';
+    if (status === 'inprogress') return 'In Progress';
+    if (status === 'blocked')    return 'Blocked';
+    if (status === 'done')       return 'Done';
   };
 
   const getNextStatus = (currentStatus) => {
@@ -82,6 +97,129 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
           </button>
         </div>
 
+        {/* Task Detail Popup */}
+        {selectedTask && (
+          <div style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000
+          }}>
+            <div style={{
+              backgroundColor: '#161B22',
+              border: '1px solid #30363D',
+              borderRadius: '16px',
+              padding: '32px',
+              width: '440px'
+            }}>
+              {/* Popup Header */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                <h2 style={{ margin: '0', fontSize: '20px' }}>Task Details</h2>
+                <button
+                  onClick={() => setSelectedTask(null)}
+                  style={{
+                    backgroundColor: '#30363D',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '6px',
+                    padding: '4px 10px',
+                    cursor: 'pointer',
+                    fontSize: '16px'
+                  }}>
+                  ✕
+                </button>
+              </div>
+
+              {/* Task Title */}
+              <h3 style={{ fontSize: '18px', margin: '0 0 20px 0', color: '#FFFFFF' }}>
+                {selectedTask.title}
+              </h3>
+
+              {/* Task Info Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+                <div style={{ backgroundColor: '#0D1117', borderRadius: '8px', padding: '12px' }}>
+                  <div style={{ color: '#8B949E', fontSize: '12px', marginBottom: '4px' }}>Assignee</div>
+                  <div style={{ fontWeight: 'bold', fontSize: '15px' }}>👤 {selectedTask.assignee}</div>
+                </div>
+                <div style={{ backgroundColor: '#0D1117', borderRadius: '8px', padding: '12px' }}>
+                  <div style={{ color: '#8B949E', fontSize: '12px', marginBottom: '4px' }}>Priority</div>
+                  <div style={{
+                    display: 'inline-block',
+                    backgroundColor: getPriorityColor(selectedTask.priority),
+                    color: '#FFFFFF',
+                    padding: '2px 10px',
+                    borderRadius: '999px',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase'
+                  }}>
+                    {selectedTask.priority}
+                  </div>
+                </div>
+                <div style={{ backgroundColor: '#0D1117', borderRadius: '8px', padding: '12px' }}>
+                  <div style={{ color: '#8B949E', fontSize: '12px', marginBottom: '4px' }}>Status</div>
+                  <div style={{
+                    display: 'inline-block',
+                    backgroundColor: getStatusColor(selectedTask.status),
+                    color: '#FFFFFF',
+                    padding: '2px 10px',
+                    borderRadius: '999px',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                  }}>
+                    {getStatusLabel(selectedTask.status)}
+                  </div>
+                </div>
+                <div style={{ backgroundColor: '#0D1117', borderRadius: '8px', padding: '12px' }}>
+                  <div style={{ color: '#8B949E', fontSize: '12px', marginBottom: '4px' }}>Task ID</div>
+                  <div style={{ fontWeight: 'bold', fontSize: '15px', color: '#6D28D9' }}>#{selectedTask.id}</div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', gap: '12px' }}>
+                {selectedTask.status !== 'done' && (
+                  <button
+                    onClick={() => {
+                      moveTask(selectedTask.id, getNextStatus(selectedTask.status));
+                      setSelectedTask(null);
+                    }}
+                    style={{
+                      flex: 1,
+                      backgroundColor: '#6D28D9',
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '12px',
+                      fontSize: '14px',
+                      fontWeight: 'bold',
+                      cursor: 'pointer'
+                    }}>
+                    Move → {getStatusLabel(getNextStatus(selectedTask.status))}
+                  </button>
+                )}
+                <button
+                  onClick={() => setSelectedTask(null)}
+                  style={{
+                    flex: 1,
+                    backgroundColor: '#30363D',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    fontSize: '14px',
+                    cursor: 'pointer'
+                  }}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Add Task Form Popup */}
         {showForm && (
           <div style={{
@@ -102,7 +240,6 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
             }}>
               <h2 style={{ margin: '0 0 24px 0', fontSize: '20px' }}>Add New Task</h2>
 
-              {/* Title */}
               <div style={{ marginBottom: '16px' }}>
                 <label style={{ display: 'block', color: '#8B949E', fontSize: '13px', marginBottom: '6px' }}>
                   Task Title *
@@ -125,7 +262,6 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
                 />
               </div>
 
-              {/* Assignee */}
               <div style={{ marginBottom: '16px' }}>
                 <label style={{ display: 'block', color: '#8B949E', fontSize: '13px', marginBottom: '6px' }}>
                   Assignee
@@ -148,7 +284,6 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
                 />
               </div>
 
-              {/* Priority */}
               <div style={{ marginBottom: '24px' }}>
                 <label style={{ display: 'block', color: '#8B949E', fontSize: '13px', marginBottom: '6px' }}>
                   Priority
@@ -173,7 +308,6 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
                 </select>
               </div>
 
-              {/* Buttons */}
               <div style={{ display: 'flex', gap: '12px' }}>
                 <button
                   onClick={handleAddTask}
@@ -222,7 +356,6 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
               borderRadius: '12px',
               padding: '16px'
             }}>
-
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -252,13 +385,22 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
               {tasks
                 .filter(task => task.status === column.id)
                 .map(task => (
-                  <div key={task.id} style={{
-                    backgroundColor: '#0D1117',
-                    border: '1px solid #30363D',
-                    borderRadius: '8px',
-                    padding: '12px',
-                    marginBottom: '8px'
-                  }}>
+                  <div
+                    key={task.id}
+                    onClick={() => setSelectedTask(task)}
+                    
+                    style={{
+                      backgroundColor: '#0D1117',
+                      border: '1px solid #30363D',
+                      borderRadius: '8px',
+                      padding: '12px',
+                      marginBottom: '8px',
+                      cursor: 'pointer',
+                      transition: 'border-color 0.2s'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = '#6D28D9'}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = '#30363D'}
+                  >
                     <div style={{
                       display: 'inline-block',
                       backgroundColor: getPriorityColor(task.priority),
@@ -294,7 +436,10 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
 
                       {column.id !== 'done' && (
                         <button
-                          onClick={() => moveTask(task.id, getNextStatus(task.status))}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            moveTask(task.id, getNextStatus(task.status));
+                          }}
                           style={{
                             backgroundColor: '#6D28D9',
                             color: '#FFFFFF',
