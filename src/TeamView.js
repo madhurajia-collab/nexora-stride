@@ -1,7 +1,6 @@
 import React from 'react';
 import Navbar from './Navbar';
-
-function TeamView({ setCurrentPage }) {
+function TeamView({ setCurrentPage, currentUser, setCurrentUser, tasks, moveTask, addTask, deleteTask }) {
   const members = [
     {
       id: 1,
@@ -98,7 +97,7 @@ function TeamView({ setCurrentPage }) {
       color: '#FFFFFF'
     }}>
 
-      <Navbar currentPage="team" setCurrentPage={setCurrentPage} />
+      <Navbar currentPage="team" setCurrentPage={setCurrentPage} currentUser={currentUser} setCurrentUser={setCurrentUser} />
 
       <div style={{ padding: '32px' }}>
 

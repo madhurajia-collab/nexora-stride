@@ -1,7 +1,6 @@
 import React from 'react';
 import Navbar from './Navbar';
-
-function Dashboard({ setCurrentPage, tasks }) {
+function Dashboard({ setCurrentPage, currentUser, setCurrentUser, tasks, moveTask, addTask, deleteTask }) {
 
   // ── Calculate numbers from real tasks ──────────────────────
   const total      = tasks.length;
@@ -39,8 +38,7 @@ function Dashboard({ setCurrentPage, tasks }) {
       color: '#FFFFFF'
     }}>
 
-      <Navbar currentPage="dashboard" setCurrentPage={setCurrentPage} />
-
+      <Navbar currentPage="dashboard" setCurrentPage={setCurrentPage} currentUser={currentUser} setCurrentUser={setCurrentUser} />
       <div style={{ padding: '32px' }}>
 
         {/* Sprint Header */}

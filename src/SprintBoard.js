@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
-
-function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
+function SprintBoard({ setCurrentPage, currentUser, setCurrentUser, tasks, moveTask, addTask, deleteTask }) {
 
   const [showForm, setShowForm] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -66,7 +65,7 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
       color: '#FFFFFF'
     }}>
 
-      <Navbar currentPage="sprintboard" setCurrentPage={setCurrentPage} />
+      <Navbar currentPage="sprintboard" setCurrentPage={setCurrentPage} currentUser={currentUser} setCurrentUser={setCurrentUser} />
 
       <div style={{ padding: '32px' }}>
 
@@ -388,7 +387,7 @@ function SprintBoard({ setCurrentPage, tasks, moveTask, addTask }) {
                   <div
                     key={task.id}
                     onClick={() => setSelectedTask(task)}
-                    
+
                     style={{
                       backgroundColor: '#0D1117',
                       border: '1px solid #30363D',

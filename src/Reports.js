@@ -1,7 +1,6 @@
 import React from 'react';
 import Navbar from './Navbar';
-
-function Reports({ setCurrentPage }) {
+function Reports({ setCurrentPage, currentUser, setCurrentUser, tasks, moveTask, addTask, deleteTask }) {
   const weeklyData = [
     { day: 'Mon', completed: 3, planned: 4 },
     { day: 'Tue', completed: 5, planned: 5 },
@@ -22,7 +21,7 @@ function Reports({ setCurrentPage }) {
       color: '#FFFFFF'
     }}>
 
-      <Navbar currentPage="reports" setCurrentPage={setCurrentPage} />
+      <Navbar currentPage="reports" setCurrentPage={setCurrentPage} currentUser={currentUser} setCurrentUser={setCurrentUser} />
 
       <div style={{ padding: '32px' }}>
 
