@@ -1,93 +1,36 @@
 import React from 'react';
 import Navbar from './Navbar';
-function TeamView({ setCurrentPage, currentUser, setCurrentUser, tasks, moveTask, addTask, deleteTask }) {
+
+function TeamView({ setCurrentPage, currentUser, setCurrentUser, tasks, addTask, deleteTask, moveTask }) {
+
   const members = [
-    {
-      id: 1,
-      name: "Rahul Sharma",
-      role: "Frontend Developer",
-      avatar: "RS",
-      color: "#6D28D9",
-      tasksTotal: 6,
-      tasksDone: 4,
-      inProgress: 2,
-      commits: 23,
-      lastActive: "2 hours ago",
-      status: "active",
-      tasks: [
-        { title: "Setup auth module", status: "done" },
-        { title: "Write unit tests", status: "inprogress" },
-        { title: "Fix login bug", status: "done" },
-      ]
-    },
-    {
-      id: 2,
-      name: "Priya Patel",
-      role: "Backend Developer",
-      avatar: "PP",
-      color: "#0891B2",
-      tasksTotal: 5,
-      tasksDone: 3,
-      inProgress: 2,
-      commits: 31,
-      lastActive: "30 mins ago",
-      status: "active",
-      tasks: [
-        { title: "Build API endpoints", status: "inprogress" },
-        { title: "Setup database", status: "done" },
-        { title: "Write API docs", status: "done" },
-      ]
-    },
-    {
-      id: 3,
-      name: "Amit Singh",
-      role: "Full Stack Developer",
-      avatar: "AS",
-      color: "#DC2626",
-      tasksTotal: 4,
-      tasksDone: 1,
-      inProgress: 1,
-      commits: 8,
-      lastActive: "1 day ago",
-      status: "blocked",
-      tasks: [
-        { title: "Fix payment bug", status: "blocked" },
-        { title: "Deploy to staging", status: "todo" },
-      ]
-    },
-    {
-      id: 4,
-      name: "Sara Khan",
-      role: "UI/UX Designer",
-      avatar: "SK",
-      color: "#16A34A",
-      tasksTotal: 5,
-      tasksDone: 4,
-      inProgress: 1,
-      commits: 12,
-      lastActive: "1 hour ago",
-      status: "active",
-      tasks: [
-        { title: "Design dashboard UI", status: "done" },
-        { title: "Code review", status: "inprogress" },
-        { title: "Design mobile view", status: "done" },
-      ]
-    },
+    { name: "You",   role: "Engineering Manager", avatar: "YO", color: "#6D28D9", commits: 18 },
+    { name: "Rahul", role: "Frontend Developer",  avatar: "RS", color: "#0891B2", commits: 23 },
+    { name: "Priya", role: "Backend Developer",   avatar: "PP", color: "#16A34A", commits: 31 },
+    { name: "Amit",  role: "Full Stack Developer",avatar: "AS", color: "#DC2626", commits: 8  },
+    { name: "Sara",  role: "UI/UX Designer",      avatar: "SK", color: "#EA580C", commits: 12 },
   ];
 
   const getStatusColor = (status) => {
-    if (status === "done") return "#16A34A";
-    if (status === "inprogress") return "#6D28D9";
-    if (status === "blocked") return "#DC2626";
-    if (status === "todo") return "#8B949E";
+    if (status === 'done')       return '#16A34A';
+    if (status === 'inprogress') return '#6D28D9';
+    if (status === 'blocked')    return '#DC2626';
+    return '#8B949E';
   };
 
   const getStatusLabel = (status) => {
-    if (status === "done") return "Done";
-    if (status === "inprogress") return "In Progress";
-    if (status === "blocked") return "Blocked";
-    if (status === "todo") return "To Do";
+    if (status === 'done')       return 'Done';
+    if (status === 'inprogress') return 'In Progress';
+    if (status === 'blocked')    return 'Blocked';
+    return 'To Do';
   };
+
+  // ── Team-wide stats from real tasks ──
+  const totalCommits   = members.reduce((sum, m) => sum + m.commits, 0);
+  const totalCompleted = tasks.filter(t => t.status === 'done').length;
+  const blockedMembers = members.filter(m =>
+    tasks.some(t => t.assignee === m.name && t.status === 'blocked')
+  ).length;
 
   return (
     <div style={{
@@ -97,15 +40,24 @@ function TeamView({ setCurrentPage, currentUser, setCurrentUser, tasks, moveTask
       color: '#FFFFFF'
     }}>
 
-      <Navbar currentPage="team" setCurrentPage={setCurrentPage} currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      <Navbar
+        currentPage="team"
+        setCurrentPage={setCurrentPage}
+        currentUser={currentUser}
+        setCurrentUser={setCurrentUser}
+      />
 
       <div style={{ padding: '32px' }}>
 
+        {/* Header */}
         <div style={{ marginBottom: '32px' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>Team View</h1>
-          <p style={{ color: '#8B949E', margin: '0' }}>Sprint 12 · 4 members · 6 days remaining</p>
+          <p style={{ color: '#8B949E', margin: '0' }}>
+            Sprint 12 · {members.length} members · 6 days remaining
+          </p>
         </div>
 
+        {/* Team Stats — real data */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
@@ -113,12 +65,12 @@ function TeamView({ setCurrentPage, currentUser, setCurrentUser, tasks, moveTask
           marginBottom: '32px'
         }}>
           {[
-            { label: 'Team Members', value: '4', color: '#8B949E' },
-            { label: 'Total Commits', value: '74', color: '#6D28D9' },
-            { label: 'Tasks Completed', value: '12', color: '#16A34A' },
-            { label: 'Blocked Members', value: '1', color: '#DC2626' },
-          ].map((stat, index) => (
-            <div key={index} style={{
+            { label: 'Team Members',    value: members.length,  color: '#8B949E' },
+            { label: 'Total Commits',   value: totalCommits,    color: '#6D28D9' },
+            { label: 'Tasks Completed', value: totalCompleted,  color: '#16A34A' },
+            { label: 'Blocked Members', value: blockedMembers,  color: '#DC2626' },
+          ].map((stat, i) => (
+            <div key={i} style={{
               backgroundColor: '#161B22',
               border: '1px solid #30363D',
               borderRadius: '12px',
@@ -133,129 +85,143 @@ function TeamView({ setCurrentPage, currentUser, setCurrentUser, tasks, moveTask
           ))}
         </div>
 
+        {/* Member Cards — real task data */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
           gap: '16px'
         }}>
-          {members.map(member => (
-            <div key={member.id} style={{
-              backgroundColor: '#161B22',
-              border: `1px solid ${member.status === 'blocked' ? '#DC2626' : '#30363D'}`,
-              borderRadius: '12px',
-              padding: '24px'
-            }}>
+          {members.map(member => {
+            const memberTasks   = tasks.filter(t => t.assignee === member.name);
+            const doneTasks     = memberTasks.filter(t => t.status === 'done');
+            const inProgTasks   = memberTasks.filter(t => t.status === 'inprogress');
+            const isBlocked     = memberTasks.some(t => t.status === 'blocked');
+            const workloadPct   = memberTasks.length > 0
+              ? Math.round((doneTasks.length / memberTasks.length) * 100)
+              : 0;
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-                <div style={{
-                  width: '50px',
-                  height: '50px',
-                  borderRadius: '50%',
-                  backgroundColor: member.color,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  flexShrink: 0
-                }}>
-                  {member.avatar}
-                </div>
-
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '4px' }}>
-                    {member.name}
-                  </div>
-                  <div style={{ color: '#8B949E', fontSize: '13px' }}>
-                    {member.role}
-                  </div>
-                </div>
-
-                <div style={{
-                  backgroundColor: member.status === 'active' ? '#16A34A' : '#DC2626',
-                  color: '#FFFFFF',
-                  padding: '4px 10px',
-                  borderRadius: '999px',
-                  fontSize: '11px',
-                  fontWeight: 'bold'
-                }}>
-                  {member.status === 'active' ? '● Active' : '⚠ Blocked'}
-                </div>
-              </div>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '8px',
-                marginBottom: '20px'
+            return (
+              <div key={member.name} style={{
+                backgroundColor: '#161B22',
+                border: `1px solid ${isBlocked ? '#DC2626' : '#30363D'}`,
+                borderRadius: '12px',
+                padding: '24px'
               }}>
-                {[
-                  { label: 'Tasks Done', value: `${member.tasksDone}/${member.tasksTotal}` },
-                  { label: 'In Progress', value: member.inProgress },
-                  { label: 'Commits', value: member.commits },
-                ].map((stat, i) => (
-                  <div key={i} style={{
-                    backgroundColor: '#0D1117',
-                    borderRadius: '8px',
-                    padding: '10px',
-                    textAlign: 'center'
-                  }}>
-                    <div style={{ fontWeight: 'bold', fontSize: '18px', color: member.color }}>
-                      {stat.value}
-                    </div>
-                    <div style={{ color: '#8B949E', fontSize: '11px' }}>{stat.label}</div>
-                  </div>
-                ))}
-              </div>
 
-              <div style={{ marginBottom: '16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '12px', color: '#8B949E' }}>Workload</span>
-                  <span style={{ fontSize: '12px', color: '#8B949E' }}>
-                    {Math.round((member.tasksDone / member.tasksTotal) * 100)}% complete
-                  </span>
-                </div>
-                <div style={{ backgroundColor: '#30363D', borderRadius: '999px', height: '6px' }}>
+                {/* Member Header */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
                   <div style={{
+                    width: '50px',
+                    height: '50px',
+                    borderRadius: '50%',
                     backgroundColor: member.color,
-                    width: `${(member.tasksDone / member.tasksTotal) * 100}%`,
-                    height: '100%',
-                    borderRadius: '999px'
-                  }}/>
-                </div>
-              </div>
-
-              <div>
-                <div style={{ fontSize: '12px', color: '#8B949E', marginBottom: '8px' }}>Recent Tasks</div>
-                {member.tasks.map((task, i) => (
-                  <div key={i} style={{
                     display: 'flex',
-                    justifyContent: 'space-between',
                     alignItems: 'center',
-                    padding: '6px 0',
-                    borderBottom: i < member.tasks.length - 1 ? '1px solid #30363D' : 'none'
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                    flexShrink: 0
                   }}>
-                    <span style={{ fontSize: '13px' }}>{task.title}</span>
-                    <span style={{
-                      backgroundColor: getStatusColor(task.status),
-                      color: '#FFFFFF',
-                      padding: '2px 8px',
-                      borderRadius: '999px',
-                      fontSize: '10px',
-                      fontWeight: 'bold'
-                    }}>
-                      {getStatusLabel(task.status)}
-                    </span>
+                    {member.avatar}
                   </div>
-                ))}
-              </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '4px' }}>
+                      {member.name === 'You' ? `${member.name} (Manager)` : member.name}
+                    </div>
+                    <div style={{ color: '#8B949E', fontSize: '13px' }}>{member.role}</div>
+                  </div>
+                  <div style={{
+                    backgroundColor: isBlocked ? '#DC2626' : '#16A34A',
+                    color: '#FFFFFF',
+                    padding: '4px 10px',
+                    borderRadius: '999px',
+                    fontSize: '11px',
+                    fontWeight: 'bold'
+                  }}>
+                    {isBlocked ? '⚠ Blocked' : '● Active'}
+                  </div>
+                </div>
 
-              <div style={{ marginTop: '12px', color: '#8B949E', fontSize: '12px' }}>
-                🕐 Last active: {member.lastActive}
-              </div>
+                {/* Stats */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '8px',
+                  marginBottom: '16px'
+                }}>
+                  {[
+                    { label: 'Tasks Done',   value: `${doneTasks.length}/${memberTasks.length}` },
+                    { label: 'In Progress',  value: inProgTasks.length },
+                    { label: 'Commits',      value: member.commits },
+                  ].map((stat, i) => (
+                    <div key={i} style={{
+                      backgroundColor: '#0D1117',
+                      borderRadius: '8px',
+                      padding: '10px',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ fontWeight: 'bold', fontSize: '18px', color: member.color }}>
+                        {stat.value}
+                      </div>
+                      <div style={{ color: '#8B949E', fontSize: '11px' }}>{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
 
-            </div>
-          ))}
+                {/* Workload Bar */}
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '12px', color: '#8B949E' }}>Workload</span>
+                    <span style={{ fontSize: '12px', color: '#8B949E' }}>{workloadPct}% complete</span>
+                  </div>
+                  <div style={{ backgroundColor: '#30363D', borderRadius: '999px', height: '6px' }}>
+                    <div style={{
+                      backgroundColor: member.color,
+                      width: `${workloadPct}%`,
+                      height: '100%',
+                      borderRadius: '999px',
+                      transition: 'width 0.5s ease'
+                    }}/>
+                  </div>
+                </div>
+
+                {/* Recent Tasks */}
+                {memberTasks.length > 0 ? (
+                  <div>
+                    <div style={{ fontSize: '12px', color: '#8B949E', marginBottom: '8px' }}>
+                      Recent Tasks
+                    </div>
+                    {memberTasks.slice(0, 3).map((task, i) => (
+                      <div key={i} style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '6px 0',
+                        borderBottom: i < Math.min(memberTasks.length, 3) - 1 ? '1px solid #30363D' : 'none'
+                      }}>
+                        <span style={{ fontSize: '13px' }}>{task.title}</span>
+                        <span style={{
+                          backgroundColor: getStatusColor(task.status),
+                          color: '#FFFFFF',
+                          padding: '2px 8px',
+                          borderRadius: '999px',
+                          fontSize: '10px',
+                          fontWeight: 'bold'
+                        }}>
+                          {getStatusLabel(task.status)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ color: '#8B949E', fontSize: '13px', textAlign: 'center', padding: '8px 0' }}>
+                    No tasks assigned yet
+                  </div>
+                )}
+
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
