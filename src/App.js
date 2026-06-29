@@ -4,25 +4,29 @@ import SprintBoard from './SprintBoard';
 import TeamView from './TeamView';
 import Reports from './Reports';
 import MyTasks from './MyTasks';
+import Login from './Login';
+import Signup from './Signup';
+import LandingPage from './LandingPage';
 
 const initialTasks = [
-  { id: 1, title: "Setup auth module",   assignee: "Rahul", status: "done",       priority: "high" },
-  { id: 2, title: "Build API endpoints", assignee: "Priya", status: "inprogress", priority: "high" },
-  { id: 3, title: "Fix payment bug",     assignee: "Amit",  status: "blocked",    priority: "critical" },
-  { id: 4, title: "Design dashboard UI", assignee: "Sara",  status: "done",       priority: "medium" },
-  { id: 5, title: "Write unit tests",    assignee: "Rahul", status: "inprogress", priority: "medium" },
-  { id: 6, title: "Setup database",      assignee: "Priya", status: "todo",       priority: "high" },
-  { id: 7, title: "Deploy to staging",   assignee: "Amit",  status: "todo",       priority: "low" },
-  { id: 8, title: "Code review",         assignee: "Sara",  status: "todo",       priority: "medium" },
-  { id: 9, title: "Review sprint plan",  assignee: "You",   status: "todo",       priority: "high" },
+  { id: 1,  title: "Setup auth module",    assignee: "Madhura Kulkarni", status: "todo",       priority: "high" },
+  { id: 2,  title: "Build API endpoints",  assignee: "Rahul",            status: "inprogress", priority: "high" },
+  { id: 3,  title: "Fix payment bug",      assignee: "Amit",             status: "blocked",    priority: "critical" },
+  { id: 4,  title: "Design dashboard UI",  assignee: "Sara",             status: "done",       priority: "medium" },
+  { id: 5,  title: "Write unit tests",     assignee: "Rahul",            status: "inprogress", priority: "medium" },
+  { id: 6,  title: "Setup database",       assignee: "Priya",            status: "todo",       priority: "high" },
+  { id: 7,  title: "Deploy to staging",    assignee: "Amit",             status: "todo",       priority: "low" },
+  { id: 8,  title: "Code review",          assignee: "Sara",             status: "todo",       priority: "medium" },
+  { id: 9,  title: "Review sprint plan",   assignee: "Madhura Kulkarni", status: "todo",       priority: "high" },
+  { id: 10, title: "Team standup prep",    assignee: "Madhura Kulkarni", status: "todo",       priority: "medium" },
+  { id: 11, title: "Sprint retrospective", assignee: "Madhura Kulkarni", status: "todo",       priority: "low" },
 ];
 
-const users = ["You", "Rahul", "Priya", "Amit", "Sara"];
-
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [currentPage, setCurrentPage] = useState('mytasks');
-  const [tasks, setTasks] = useState(initialTasks);
+  const [currentUser, setCurrentUser]   = useState(null);
+  const [authScreen, setAuthScreen]     = useState('landing');
+  const [currentPage, setCurrentPage]   = useState('mytasks');
+  const [tasks, setTasks]               = useState(initialTasks);
 
   const moveTask = (taskId, newStatus) => {
     setTasks(tasks.map(task =>
@@ -31,10 +35,7 @@ function App() {
   };
 
   const addTask = (newTask) => {
-    const task = {
-      ...newTask,
-      id: Date.now()
-    };
+    const task = { ...newTask, id: Date.now() };
     setTasks([...tasks, task]);
   };
 
@@ -42,96 +43,48 @@ function App() {
     setTasks(tasks.filter(task => task.id !== taskId));
   };
 
-  // ── LOGIN SCREEN ──────────────────────────────────────────
+  const handleLogin = (user) => {
+    setCurrentUser(user);
+    setCurrentPage('mytasks');
+  };
+
+  const handleSignup = (user) => {
+    setCurrentUser(user);
+    setCurrentPage('mytasks');
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setAuthScreen('landing');
+    setCurrentPage('mytasks');
+  };
+
+  // ── Not logged in ──
   if (!currentUser) {
+    if (authScreen === 'landing') {
+      return <LandingPage onGetStarted={(screen) => setAuthScreen(screen)} />;
+    }
+    if (authScreen === 'signup') {
+      return (
+        <Signup
+          onSignup={handleSignup}
+          onGoToLogin={() => setAuthScreen('login')}
+        />
+      );
+    }
     return (
-      <div style={{
-        backgroundColor: '#0D1117',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: 'Arial, sans-serif'
-      }}>
-        <div style={{
-          textAlign: 'center',
-          padding: '60px',
-          backgroundColor: '#161B22',
-          borderRadius: '16px',
-          border: '1px solid #30363D',
-          width: '420px'
-        }}>
-          <div style={{
-            fontSize: '14px',
-            color: '#6D28D9',
-            fontWeight: 'bold',
-            letterSpacing: '4px',
-            marginBottom: '8px'
-          }}>
-            NEXORA
-          </div>
-          <h1 style={{
-            fontSize: '42px',
-            fontWeight: 'bold',
-            color: '#FFFFFF',
-            margin: '0 0 8px 0'
-          }}>
-            Stride
-          </h1>
-          <p style={{
-            color: '#8B949E',
-            fontSize: '14px',
-            marginBottom: '32px'
-          }}>
-            Who's logging in?
-          </p>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {users.map(user => (
-              <button
-                key={user}
-                onClick={() => setCurrentUser(user)}
-                style={{
-                  backgroundColor: user === 'You' ? '#6D28D9' : '#0D1117',
-                  border: user === 'You' ? 'none' : '1px solid #30363D',
-                  color: '#FFFFFF',
-                  borderRadius: '8px',
-                  padding: '14px',
-                  fontSize: '15px',
-                  fontWeight: user === 'You' ? 'bold' : 'normal',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  paddingLeft: '20px'
-                }}>
-                {user === 'You' ? '👑 You — Manager' : `👤 ${user}`}
-              </button>
-            ))}
-          </div>
-
-          <p style={{
-            color: '#30363D',
-            fontSize: '12px',
-            margin: '32px 0 0 0'
-          }}>
-            Track. Predict. Deliver.
-          </p>
-        </div>
-      </div>
+      <Login
+        onLogin={handleLogin}
+        onGoToSignup={() => setAuthScreen('signup')}
+      />
     );
   }
-  <p style={{
-  color: '#30363D',
-  fontSize: '12px',
-  margin: '32px 0 0 0'
-}}>
-  Track. Predict. Deliver.
-</p>
 
-  // ── MAIN APP ──────────────────────────────────────────────
+  // ── Logged in ──
   const commonProps = {
     setCurrentPage,
-    currentUser,
-    setCurrentUser,
+    currentUser: currentUser.name,
+    setCurrentUser: handleLogout,
     tasks,
     moveTask,
     addTask,

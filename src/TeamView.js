@@ -4,7 +4,7 @@ import Navbar from './Navbar';
 function TeamView({ setCurrentPage, currentUser, setCurrentUser, tasks, addTask, deleteTask, moveTask }) {
 
   const members = [
-    { name: "You",   role: "Engineering Manager", avatar: "YO", color: "#6D28D9", commits: 18 },
+    { name: "Madhura Kulkarni", role: "Engineering Manager", avatar: "MK", color: "#6D28D9", commits: 18 },
     { name: "Rahul", role: "Frontend Developer",  avatar: "RS", color: "#0891B2", commits: 23 },
     { name: "Priya", role: "Backend Developer",   avatar: "PP", color: "#16A34A", commits: 31 },
     { name: "Amit",  role: "Full Stack Developer",avatar: "AS", color: "#DC2626", commits: 8  },
