@@ -70,7 +70,7 @@ function Navbar({ currentPage, setCurrentPage, currentUser, setCurrentUser }) {
           </span>
         ))}
         <div
-          onClick={() => setCurrentUser(null)}
+          onClick={() => setCurrentPage('profile')}
           title="Click to switch user"
           style={{
             backgroundColor: '#6D28D9',

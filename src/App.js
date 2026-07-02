@@ -1,3 +1,4 @@
+import Profile from './Profile';
 import React, { useState } from 'react';
 import Dashboard from './Dashboard';
 import SprintBoard from './SprintBoard';
@@ -91,6 +92,7 @@ function App() {
     deleteTask
   };
 
+  if (currentPage === 'profile') return <Profile {...commonProps} />;
   if (currentPage === 'sprintboard') return <SprintBoard {...commonProps} />;
   if (currentPage === 'team')        return <TeamView {...commonProps} />;
   if (currentPage === 'reports')     return <Reports {...commonProps} />;
